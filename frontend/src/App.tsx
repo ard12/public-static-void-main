@@ -26,6 +26,7 @@ function App() {
         <Route path="/timeline/:id" element={<CaseTimelinePage />} />
         <Route path="/evidence" element={<EvidenceReviewPage />} />
         <Route path="/scoring" element={<ScoringPage />} />
+        <Route path="/scoring/:id" element={<ScoringPage />} />
         <Route path="/announcements" element={<AnnouncementsPage />} />
         <Route path="/referrals" element={<ReferralsPage />} />
         

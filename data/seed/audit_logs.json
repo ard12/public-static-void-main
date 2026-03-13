@@ -366,5 +366,47 @@
       "new_state": "accepted"
     },
     "created_at": "2026-03-13T19:52:43.351126+00:00"
+  },
+  {
+    "id": "2cb5312b-3a2c-43ec-a133-f3fd17fb9e29",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "edeb5bb5-e051-43aa-a8db-5d2b8d273a81",
+    "details": {
+      "type": "government_record",
+      "class": "official"
+    },
+    "created_at": "2026-03-13T21:06:09.528146+00:00"
+  },
+  {
+    "id": "45be21d5-d64c-446c-a1a4-55a549cf4640",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "edeb5bb5-e051-43aa-a8db-5d2b8d273a81",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-13T21:06:09.541827+00:00"
+  },
+  {
+    "id": "07bfa2c3-1749-4695-ab44-3e61e4f1cff1",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "7403dbdb-70ba-4c82-b7aa-d2e4f3b6c8a1",
+    "details": {
+      "type": "passport",
+      "class": "official"
+    },
+    "created_at": "2026-03-13T21:44:05.849486+00:00"
+  },
+  {
+    "id": "f2b4e193-ef1e-4cd1-8e6c-561950ac1645",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "7403dbdb-70ba-4c82-b7aa-d2e4f3b6c8a1",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-13T21:44:20.029666+00:00"
   }
 ]
