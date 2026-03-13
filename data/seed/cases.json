@@ -485,5 +485,29 @@
     "created_by": "auth_manager_1",
     "created_at": "2026-03-13T19:09:25.406689+00:00",
     "updated_at": "2026-03-13T19:09:25.427020+00:00"
+  },
+  {
+    "id": "8753cb2e-7a88-4145-98ce-5a44afcc0610",
+    "case_id": "8753cb2e-7a88-4145-98ce-5a44afcc0610",
+    "case_code": "BB-1040",
+    "status": "intake_created",
+    "person": {
+      "person_id": "person-score-test"
+    },
+    "created_by": "auth_manager_1",
+    "created_at": "2026-03-13T19:52:43.282173+00:00",
+    "updated_at": "2026-03-13T19:52:43.282183+00:00"
+  },
+  {
+    "id": "3914f7d1-2631-4378-ac8e-99b86d3aed0b",
+    "case_id": "3914f7d1-2631-4378-ac8e-99b86d3aed0b",
+    "case_code": "BB-1041",
+    "status": "evidence_pending",
+    "person": {
+      "person_id": "person-score-e2e"
+    },
+    "created_by": "auth_manager_1",
+    "created_at": "2026-03-13T19:52:43.302457+00:00",
+    "updated_at": "2026-03-13T19:52:43.336245+00:00"
   }
 ]
