@@ -13,14 +13,14 @@
 ### Run frontend
 ```bash
 # Use any local server, e.g.
-cd client
+cd frontend
 python -m http.server 3000
 ```
 Then open `http://localhost:3000` in your browser.
 
 ### Run backend
 ```bash
-cd server
+cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
@@ -48,8 +48,8 @@ cp .env.example .env
 ## Team
 | Person | Area | Branch |
 |--------|------|--------|
-| Person 1 | Authority dashboard + case detail UI | `feature/client-authority` |
-| Person 2 | Refugee portal + partner dashboard UI | `feature/client-refugee-partner` |
+| Person 1 | Authority dashboard + case detail UI | `feature/frontend-authority` |
+| Person 2 | Refugee portal + partner dashboard UI | `feature/frontend-refugee-partner` |
 | Person 3 | FastAPI backend + API integration | `feature/backend-api` |
 | Person 4 | Database schema + ML scoring | `feature/data-ml` |
 

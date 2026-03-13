@@ -1,8 +1,8 @@
 # Demo Script
 
 ## Setup
-1. Start backend: `cd server && uvicorn app.main:app --reload`
-2. Open frontend: serve `client/` on port 3000
+1. Start backend: `cd backend && uvicorn app.main:app --reload`
+2. Open frontend: serve `frontend/` on port 3000
 3. Ensure Supabase has schema + seed data loaded
 
 ## Demo Flow (3–5 minutes)
