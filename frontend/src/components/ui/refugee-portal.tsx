@@ -231,10 +231,15 @@ const PortalContent = ({ isDark, setIsDark }: PortalContentProps) => {
 
         {/* Self-declaration Forms Area */}
         <section className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-           <div className="p-5 border-b border-gray-200 dark:border-gray-800">
-             <h2 className="text-lg font-semibold mb-1">Submit Information</h2>
+           <div className="p-5 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all">
+             <h2 className="text-lg font-semibold mb-1">
+                {activeTab === 'profile' ? "My Profile" : "Submit Information"}
+             </h2>
              <p className="text-sm text-gray-500 dark:text-gray-400">
-               You can submit self-declared details below. These will be reviewed by an officer — they do not directly change your score or status until verified.
+               {activeTab === 'profile' 
+                 ? "Manage your identity profile and view recent case activity."
+                 : "You can submit self-declared details below. These will be reviewed by an officer — they do not directly change your score or status until verified."
+               }
              </p>
            </div>
            
@@ -258,25 +263,110 @@ const PortalContent = ({ isDark, setIsDark }: PortalContentProps) => {
 
            <div className="p-6">
               {activeTab === 'profile' && (
-                <form className="space-y-4 max-w-2xl">
-                   <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Known Alias / Nickname</label>
-                        <input type="text" className="w-full px-3 py-2 bg-transparent border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                <div className="flex flex-col xl:flex-row gap-8">
+                  {/* Avatar & Basic Info Card */}
+                  <div className="bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm flex-1">
+                    {/* Banner */}
+                    <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600 relative overflow-hidden">
+                       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+                    </div>
+                    
+                    <div className="px-6 pb-6 relative">
+                      {/* Avatar */}
+                      <div className="w-24 h-24 rounded-full border-4 border-white dark:border-gray-900 bg-gray-100 dark:bg-gray-700 absolute -top-12 flex items-center justify-center text-4xl shadow-md overflow-hidden">
+                        <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=Anna&backgroundColor=e2e8f0`} alt="Avatar" className="w-full h-full object-cover" />
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Place of Origin (City/Town)</label>
-                        <input type="text" className="w-full px-3 py-2 bg-transparent border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                      
+                      {/* Bio */}
+                      <div className="mt-14">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Anna K.</h3>
+                          <CheckCircle2 className="w-5 h-5 text-blue-500" />
+                        </div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Origin: <span className="font-medium text-gray-700 dark:text-gray-300">Kyiv, Ukraine</span> • Joined Oct 2026</p>
+                        
+                        <p className="mt-4 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                          Displaced from Kyiv. Currently residing in Camp Alpha. Seeking employment in education and looking to reunite with my brother.
+                        </p>
+                        
+                        {/* Metrics Ribbon */}
+                        <div className="flex gap-6 mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 text-sm">
+                          <div className="flex flex-col">
+                            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">145</span>
+                            <span className="text-gray-500 dark:text-gray-400 font-medium">Days in System</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">4</span>
+                            <span className="text-gray-500 dark:text-gray-400 font-medium">Verified Docs</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">2</span>
+                            <span className="text-gray-500 dark:text-gray-400 font-medium">Family Links</span>
+                          </div>
+                        </div>
+                        
+                        {/* Actions */}
+                        <div className="mt-8 flex gap-3">
+                           <GradientButton type="button" className="px-5 py-2.5 rounded-lg flex-1">
+                             Edit Profile
+                           </GradientButton>
+                           <button className="px-5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                             Declare Information
+                           </button>
+                        </div>
                       </div>
-                   </div>
-                   <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Additional Context</label>
-                      <textarea rows={3} className="w-full px-3 py-2 bg-transparent border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Provide any additional notes about your identity..."></textarea>
-                   </div>
-                   <GradientButton type="button" className="px-5 py-2 rounded-lg">
-                     Submit Declaration
-                   </GradientButton>
-                </form>
+                    </div>
+                  </div>
+                  
+                  {/* Activity Feed */}
+                  <div className="flex-[1.2] space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 px-1">Case Timeline</h3>
+                    
+                    <div className="space-y-4">
+                      {/* Activity Item 1 */}
+                      <div className="flex gap-4">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-800">
+                          <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div className="bg-gray-50 dark:bg-gray-800/40 p-5 rounded-xl border border-gray-100 dark:border-gray-800 flex-1 hover:border-gray-200 dark:hover:border-gray-700 transition-colors shadow-sm">
+                          <div className="flex justify-between items-start mb-1">
+                            <p className="font-semibold text-gray-900 dark:text-gray-100">Uploaded Diploma</p>
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1 rounded-md border border-gray-100 dark:border-gray-700 shadow-sm">2 days ago</span>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Submitted University degree for verification to assist with employment referrals in the education sector.</p>
+                        </div>
+                      </div>
+                      
+                      {/* Activity Item 2 */}
+                      <div className="flex gap-4">
+                        <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center shrink-0 border border-green-200 dark:border-green-800">
+                          <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        </div>
+                        <div className="bg-gray-50 dark:bg-gray-800/40 p-5 rounded-xl border border-gray-100 dark:border-gray-800 flex-1 hover:border-gray-200 dark:hover:border-gray-700 transition-colors shadow-sm">
+                          <div className="flex justify-between items-start mb-1">
+                            <p className="font-semibold text-gray-900 dark:text-gray-100">Status Upgraded</p>
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1 rounded-md border border-gray-100 dark:border-gray-700 shadow-sm">1 week ago</span>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Identity verified by Case Officer Smith. Trust tier increased to "Provisional Identity".</p>
+                        </div>
+                      </div>
+
+                      {/* Activity Item 3 */}
+                      <div className="flex gap-4">
+                        <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center shrink-0 border border-purple-200 dark:border-purple-800">
+                          <User className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        </div>
+                        <div className="bg-gray-50 dark:bg-gray-800/40 p-5 rounded-xl border border-gray-100 dark:border-gray-800 flex-1 hover:border-gray-200 dark:hover:border-gray-700 transition-colors shadow-sm">
+                          <div className="flex justify-between items-start mb-1">
+                            <p className="font-semibold text-gray-900 dark:text-gray-100">Joined BorderBridge</p>
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1 rounded-md border border-gray-100 dark:border-gray-700 shadow-sm">Oct 2026</span>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Initial intake completed at Border Checkpoint Alpha. Welcome to the Refugee Self-Service Portal.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
               {activeTab !== 'profile' && (
                  <div className="py-8 text-center text-gray-500 dark:text-gray-400">

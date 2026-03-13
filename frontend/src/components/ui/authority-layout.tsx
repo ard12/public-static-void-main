@@ -52,7 +52,7 @@ export const AuthorityLayout = ({
                </div>
                {open && (
                  <div className="flex flex-col">
-                   <span className="text-sm font-bold text-gray-900 dark:text-white leading-tight">BorderBridge</span>
+                   <span className="text-sm font-bold text-gray-900 dark:text-white leading-tight">Beyond Borders</span>
                    <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium tracking-wide uppercase">Authority System</span>
                  </div>
                )}

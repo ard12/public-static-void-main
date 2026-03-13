@@ -1,6 +1,7 @@
 
 import { AuthorityLayout } from "./authority-layout";
-import { ShieldCheck, Crosshair, Users, BookOpen, Briefcase, Activity, User } from "lucide-react";
+import { ShieldCheck, BookOpen, Briefcase } from "lucide-react";
+import { EvidenceGraph } from "./evidence-graph";
 
 export const ScoringPage = () => {
   return (
@@ -57,69 +58,10 @@ export const ScoringPage = () => {
                   </div>
                </div>
 
-               <h3 className="text-lg font-semibold mb-6 border-b border-gray-100 dark:border-gray-800 pb-2">Identity Evidence Graph</h3>
+               <h3 className="text-lg font-semibold mb-6 border-b border-gray-100 dark:border-gray-800 pb-2">Identity Evidence Map</h3>
                
-               {/* Mock Tree Graph */}
-               <div className="relative pt-4 pb-8 pl-4">
-                  {/* Vertical line connecting nodes */}
-                  <div className="absolute left-[39px] top-6 bottom-16 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
-
-                  <div className="space-y-6">
-                     <div className="flex items-center gap-4 relative z-10">
-                        <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center border-2 border-gray-200 dark:border-gray-700 shadow-sm shrink-0">
-                           <User className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-                        </div>
-                        <div className="flex-1 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-800">
-                           <p className="font-semibold text-gray-900 dark:text-gray-100">Ahmad Karimi</p>
-                           <p className="text-xs text-gray-500">Subject Root Node</p>
-                        </div>
-                     </div>
-
-                     <div className="flex items-center gap-4 relative z-10 ml-8">
-                        {/* Horizontal connecting line */}
-                        <div className="absolute -left-8 top-1/2 w-8 h-0.5 bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center border border-blue-200 dark:border-blue-800 shadow-sm shrink-0">
-                           <Crosshair className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                        </div>
-                        <div className="flex-1 bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 flex justify-between items-center shadow-sm">
-                           <div>
-                              <p className="font-semibold text-sm">Biometric Match</p>
-                              <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">Verified by UNHCR DB</p>
-                           </div>
-                           <span className="font-bold text-green-600 dark:text-green-400 px-3 py-1 bg-green-50 dark:bg-green-900/10 rounded-full text-sm">+30 pts</span>
-                        </div>
-                     </div>
-
-                     <div className="flex items-center gap-4 relative z-10 ml-8">
-                        <div className="absolute -left-8 top-1/2 w-8 h-0.5 bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center border border-purple-200 dark:border-purple-800 shadow-sm shrink-0">
-                           <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                        </div>
-                        <div className="flex-1 bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 flex justify-between items-center shadow-sm">
-                           <div>
-                              <p className="font-semibold text-sm">Family Confirmation</p>
-                              <p className="text-xs text-gray-500 font-medium">Wife (Verified Record)</p>
-                           </div>
-                           <span className="font-bold text-green-600 dark:text-green-400 px-3 py-1 bg-green-50 dark:bg-green-900/10 rounded-full text-sm">+20 pts</span>
-                        </div>
-                     </div>
-
-                     <div className="flex items-center gap-4 relative z-10 ml-8">
-                        <div className="absolute -left-8 top-1/2 w-8 h-0.5 bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center border border-yellow-200 dark:border-yellow-800 shadow-sm shrink-0">
-                           <Activity className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
-                        </div>
-                        <div className="flex-1 bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 flex justify-between items-center shadow-sm">
-                           <div>
-                              <p className="font-semibold text-sm">NGO Validation</p>
-                              <p className="text-xs text-gray-500 font-medium">Local Aid Organization</p>
-                           </div>
-                           <span className="font-bold text-green-600 dark:text-green-400 px-3 py-1 bg-green-50 dark:bg-green-900/10 rounded-full text-sm">+15 pts</span>
-                        </div>
-                     </div>
-
-                  </div>
-               </div>
+               {/* Interactive Graph */}
+               <EvidenceGraph />
             </div>
          </div>
 

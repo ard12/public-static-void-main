@@ -1,5 +1,6 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { LandingPage } from './components/ui/landing-page';
 import { AnimatedLoginPage } from './components/ui/animated-characters-login-page';
 import { AuthorityDashboard } from './components/ui/dashboard-with-collapsible-sidebar';
 import { CaseDetail } from './components/ui/case-detail';
@@ -16,7 +17,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<AnimatedLoginPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<AnimatedLoginPage />} />
         <Route path="/dashboard" element={<AuthorityDashboard />} />
         <Route path="/cases" element={<CasesPage />} />
         <Route path="/case/:id" element={<CaseDetail />} />
