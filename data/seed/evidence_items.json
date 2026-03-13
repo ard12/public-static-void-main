@@ -1,0 +1,54 @@
+[
+  {
+    "id": "e1000000-0000-0000-0000-000000000001",
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "evidence_type": "verified_ngo_record",
+    "trust_class": "official",
+    "source": "UNHCR field office",
+    "details": {
+      "reference": "UNHCR-AK-2026"
+    },
+    "review_status": "accepted",
+    "created_at": "2026-03-13T08:30:00+00:00"
+  },
+  {
+    "id": "e1000000-0000-0000-0000-000000000002",
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "evidence_type": "family_confirmation",
+    "trust_class": "corroborated",
+    "source": "Wife Fatima Karimi",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-13T08:31:00+00:00"
+  },
+  {
+    "id": "e1000000-0000-0000-0000-000000000003",
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "evidence_type": "employer_confirmation",
+    "trust_class": "corroborated",
+    "source": "Local bakery owner",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-13T08:32:00+00:00"
+  },
+  {
+    "id": "e1000000-0000-0000-0000-000000000004",
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "evidence_type": "profile_details",
+    "trust_class": "self_declared",
+    "source": "Self-submitted",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-13T08:33:00+00:00"
+  },
+  {
+    "id": "e1000000-0000-0000-0000-000000000005",
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "evidence_type": "education_claims",
+    "trust_class": "self_declared",
+    "source": "Self-submitted",
+    "details": {},
+    "review_status": "pending",
+    "created_at": "2026-03-13T08:34:00+00:00"
+  }
+]
