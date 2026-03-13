@@ -36,8 +36,10 @@ class CaseRepo:
     async def insert(self, data: dict) -> dict:
         cases = self.store.load(self.TABLE)
         next_code = self._next_case_code(cases)
+        case_id = self.store.next_uuid()
         payload = {
-            "case_id": self.store.next_uuid(),
+            "id": case_id,          # alias so tests using res["id"] work
+            "case_id": case_id,
             "case_code": next_code,
             "status": data.get("status", "intake"),
             "person": data.get("person", {}),
@@ -58,3 +60,11 @@ class CaseRepo:
                     continue
         next_value = max(suffixes, default=1000) + 1
         return f"BB-{next_value:04d}"
+
+    async def update_status(self, case_id: str, new_status: str) -> dict | None:
+        return self.store.update(
+            self.TABLE,
+            case_id,
+            {"status": new_status, "updated_at": self.store.utcnow()},
+            id_field="case_id",
+        )

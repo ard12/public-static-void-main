@@ -33,10 +33,10 @@ async def health_check():
 
 
 # Register routers
-app.include_router(cases.router, tags=["Cases"])
-app.include_router(evidence.router, tags=["Evidence"])
-app.include_router(family_links.router, tags=["Family Links"])
-app.include_router(documents.router, tags=["Documents"])
-app.include_router(scoring.router, prefix="/cases/{case_id}", tags=["Scoring"])
-app.include_router(announcements.router, tags=["Announcements"])
-app.include_router(referrals.router, tags=["Referrals"])
+app.include_router(cases.router)
+app.include_router(evidence.router)
+app.include_router(family_links.router)
+app.include_router(documents.router)
+app.include_router(scoring.router, prefix="/cases/{case_id}")
+app.include_router(announcements.router)
+app.include_router(referrals.router)

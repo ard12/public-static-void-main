@@ -29,3 +29,12 @@ class EvidenceRepo:
             "created_at": self.store.utcnow(),
         }
         return self.store.insert(self.TABLE, payload)
+
+    async def find_by_id(self, evidence_id: str) -> dict | None:
+        return next(
+            (item for item in self.store.load(self.TABLE) if item.get("id") == evidence_id),
+            None,
+        )
+
+    async def update(self, evidence_id: str, updates: dict) -> dict | None:
+        return self.store.update(self.TABLE, evidence_id, updates, id_field="id")

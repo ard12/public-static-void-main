@@ -9,18 +9,18 @@ from app.core.security import User
 
 router = APIRouter(tags=["referrals"])
 
-@router.post("/cases/{case_id}/referrals", response_model=Referral)
+@router.post("/cases/{case_id}/referrals", response_model=dict)
 async def create_referral(
     case_id: str,
     ref_in: ReferralCreate,
     current_user: Annotated[User, Depends(get_current_user)]
 ):
-    return referral_service.create_referral(case_id, ref_in, current_user)
+    return await referral_service.create_referral(case_id, ref_in, current_user)
 
-@router.patch("/referrals/{referral_id}", response_model=Referral)
+@router.patch("/referrals/{referral_id}", response_model=dict)
 async def update_referral(
     referral_id: str,
     ref_in: ReferralUpdate,
     current_user: Annotated[User, Depends(get_current_user)]
 ):
-    return referral_service.update_referral(referral_id, ref_in, current_user)
+    return await referral_service.update_referral(referral_id, ref_in, current_user)

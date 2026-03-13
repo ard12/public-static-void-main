@@ -28,11 +28,18 @@ class CaseService:
         latest = await self.score_repo.find_latest(case_id)
         return self._attach_latest_score(case, latest)
 
-    async def create_case(self, data, created_by: str | None = None) -> dict:
+    async def create_case(self, data, created_by: str | None = None, role: str | None = None) -> dict:
+        # Support both payload styles:
+        # new-style: person is a nested dict with name, nationality, etc.
+        # old-style / test-style: person_id is a flat string, no nested person dict
+        person = data.person or {}
+        if not person and data.person_id:
+            person = {"person_id": data.person_id}
+
         payload = await self.case_repo.insert(
             {
-                "person": data.person.model_dump(),
-                "status": data.status,
+                "person": person,
+                "status": data.status or "intake_created",
                 "created_by": created_by,
             }
         )

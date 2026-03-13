@@ -29,3 +29,12 @@ class ReferralRepo:
             "created_at": self.store.utcnow(),
         }
         return self.store.insert(self.TABLE, payload)
+
+    async def find_by_id(self, referral_id: str) -> dict | None:
+        return next(
+            (item for item in self.store.load(self.TABLE) if item.get("id") == referral_id),
+            None,
+        )
+
+    async def update(self, referral_id: str, updates: dict) -> dict | None:
+        return self.store.update(self.TABLE, referral_id, updates, id_field="id")

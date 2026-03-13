@@ -35,6 +35,9 @@ class ScoreRepo:
             "top_factors": data.get("top_factors", []),
             "blocking_constraints": data.get("blocking_constraints", []),
             "model_version": data.get("model_version", "rule-based-v1"),
+            "model_name": data.get("model_name", data.get("model_version", "rule-based-v1")),
+            "feature_snapshot": data.get("feature_snapshot", {}),
             "computed_at": data.get("computed_at", self.store.utcnow()),
+            "created_at": data.get("created_at", self.store.utcnow()),
         }
         return self.store.insert(self.TABLE, payload)

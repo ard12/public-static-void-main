@@ -84,6 +84,7 @@ def rule_based_score(features: dict) -> dict:
         "top_factors": top_factors[:5],
         "blocking_constraints": get_blocking_constraints(features),
         "model_version": "rule-based-v1",
+        "feature_snapshot": features,
     }
 
 

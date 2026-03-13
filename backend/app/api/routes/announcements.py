@@ -16,9 +16,9 @@ async def create_announcement(
 ):
     return announcement_service.create_announcement(ann_in, current_user)
 
-@router.get("/cases/{case_id}/announcements", response_model=List[Announcement])
+@router.get("/cases/{case_id}/announcements", response_model=List[dict])
 async def get_case_announcements(
     case_id: str,
     current_user: Annotated[User, Depends(get_current_user)]
 ):
-    return announcement_service.get_announcements_for_case(case_id)
+    return await announcement_service.list_announcements(case_id)
