@@ -1,11 +1,31 @@
 """Referral repository."""
 
+from __future__ import annotations
+
+from app.repositories.json_store import JsonStore
+
 
 class ReferralRepo:
     TABLE = "referrals"
 
-    async def find_by_case(self, case_id: str):
-        return []
+    def __init__(self, store: JsonStore | None = None) -> None:
+        self.store = store or JsonStore()
 
-    async def insert(self, data: dict):
-        return data
+    async def find_by_case(self, case_id: str) -> list[dict]:
+        return [
+            item for item in self.store.load(self.TABLE)
+            if item.get("case_id") == case_id
+        ]
+
+    async def insert(self, data: dict) -> dict:
+        payload = {
+            "id": self.store.next_uuid(),
+            "case_id": data["case_id"],
+            "referral_type": data["referral_type"],
+            "description": data.get("description"),
+            "partner_id": data.get("partner_id"),
+            "status": data.get("status", "pending"),
+            "created_by": data.get("created_by"),
+            "created_at": self.store.utcnow(),
+        }
+        return self.store.insert(self.TABLE, payload)

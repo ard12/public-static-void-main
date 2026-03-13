@@ -1,0 +1,12 @@
+[
+  {
+    "id": "r1000000-0000-0000-0000-000000000001",
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "referral_type": "employment",
+    "description": "Translation services - Arabic/English",
+    "partner_id": "a1000000-0000-0000-0000-000000000003",
+    "status": "active",
+    "created_by": "a1000000-0000-0000-0000-000000000001",
+    "created_at": "2026-03-13T08:50:00+00:00"
+  }
+]

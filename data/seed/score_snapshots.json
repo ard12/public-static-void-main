@@ -1,0 +1,25 @@
+[
+  {
+    "id": "s1000000-0000-0000-0000-000000000001",
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "predicted_score": 65.2,
+    "confidence_band": "verified",
+    "top_factors": [
+      {
+        "name": "Verified NGO record",
+        "impact": 15.0
+      },
+      {
+        "name": "Family confirmation (wife)",
+        "impact": 10.5
+      },
+      {
+        "name": "Employer confirmation",
+        "impact": 8.3
+      }
+    ],
+    "blocking_constraints": [],
+    "model_version": "seed-rule-v1",
+    "computed_at": "2026-03-13T08:55:00+00:00"
+  }
+]

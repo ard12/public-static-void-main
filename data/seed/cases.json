@@ -1,0 +1,44 @@
+[
+  {
+    "case_id": "c1000000-0000-0000-0000-000000000001",
+    "case_code": "BB-1001",
+    "status": "provisional_identity",
+    "person": {
+      "name": "Ahmad Karimi",
+      "nationality": "Syrian",
+      "language": "Arabic",
+      "date_of_birth": "1985-03-15"
+    },
+    "created_by": "a1000000-0000-0000-0000-000000000001",
+    "created_at": "2026-03-13T08:15:00+00:00",
+    "updated_at": "2026-03-13T08:15:00+00:00"
+  },
+  {
+    "case_id": "c1000000-0000-0000-0000-000000000002",
+    "case_code": "BB-1002",
+    "status": "intake",
+    "person": {
+      "name": "Fatima Karimi",
+      "nationality": "Syrian",
+      "language": "Arabic",
+      "date_of_birth": "1988-07-22"
+    },
+    "created_by": "a1000000-0000-0000-0000-000000000001",
+    "created_at": "2026-03-13T08:20:00+00:00",
+    "updated_at": "2026-03-13T08:20:00+00:00"
+  },
+  {
+    "case_id": "c1000000-0000-0000-0000-000000000003",
+    "case_code": "BB-1003",
+    "status": "under_review",
+    "person": {
+      "name": "Omar Hassan",
+      "nationality": "Iraqi",
+      "language": "Arabic",
+      "date_of_birth": "1990-11-03"
+    },
+    "created_by": "a1000000-0000-0000-0000-000000000001",
+    "created_at": "2026-03-13T08:25:00+00:00",
+    "updated_at": "2026-03-13T08:25:00+00:00"
+  }
+]
