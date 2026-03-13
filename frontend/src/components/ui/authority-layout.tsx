@@ -5,6 +5,7 @@ import {
   Home, Monitor, Tag, BarChart3, Users, ChevronsRight, GitCommit,
   Moon, Sun, Bell, User, BellRing
 } from "lucide-react";
+import { ShaderAnimation } from "./shader-animation";
 
 export const AuthorityLayout = ({ 
   children, 
@@ -117,8 +118,14 @@ export const AuthorityLayout = ({
             </header>
             
             {/* Scrollable Page Space */}
-            <main className="flex-1 overflow-auto bg-gray-50/50 dark:bg-gray-950/50 p-6 lg:p-8">
-               <div className="max-w-7xl mx-auto w-full pb-12">
+            <main className="relative flex-1 overflow-auto bg-gray-50/50 dark:bg-gray-950/50 p-6 lg:p-8">
+               <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                 <div className="absolute inset-0 opacity-[0.1] dark:opacity-[0.16]">
+                   <ShaderAnimation className="h-full w-full" />
+                 </div>
+                 <div className="absolute inset-0 bg-gradient-to-b from-gray-50/92 via-gray-50/78 to-gray-50/95 dark:from-gray-950/94 dark:via-gray-950/82 dark:to-gray-950/96" />
+               </div>
+               <div className="relative z-10 max-w-7xl mx-auto w-full pb-12">
                  {children}
                </div>
             </main>

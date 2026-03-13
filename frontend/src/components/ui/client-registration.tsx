@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { GradientButton } from "./gradient-button";
+import { ShaderAnimation } from "./shader-animation";
 
 export const ClientRegistration = () => {
   const [isDark, setIsDark] = useState(false);
@@ -265,9 +266,15 @@ interface RegistrationContentProps {
 
 const RegistrationContent = ({ isDark, setIsDark }: RegistrationContentProps) => {
   return (
-    <div className="flex-1 bg-gray-50 dark:bg-gray-950 p-6 overflow-auto">
+    <div className="relative flex-1 overflow-auto bg-gray-50 dark:bg-gray-950 p-6">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.08] dark:opacity-[0.14]">
+          <ShaderAnimation className="h-full w-full" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/95 via-gray-50/84 to-gray-50/96 dark:from-gray-950/95 dark:via-gray-950/84 dark:to-gray-950/97" />
+      </div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="relative z-10 flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Client Registration</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">Enroll a new person into the identity system.</p>
@@ -294,7 +301,7 @@ const RegistrationContent = ({ isDark, setIsDark }: RegistrationContentProps) =>
       </div>
       
       {/* Registration Form Card */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm max-w-4xl">
+      <div className="relative z-10 max-w-4xl rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div className="p-6 border-b border-gray-200 dark:border-gray-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Profile Details</h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Please enter the individual's primary details.</p>

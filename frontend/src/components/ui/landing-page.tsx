@@ -6,6 +6,7 @@ import {
   ClipboardList, Clock, Bell, Building2, BookOpen,
   HeartHandshake, UserCheck, Layers, Menu, X
 } from "lucide-react"
+import { ContainerScroll } from "./container-scroll-animation"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -482,91 +483,104 @@ function HowItWorks() {
 
 function IdentityConfidence() {
   return (
-    <section className="py-24 bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900">Transparent identity confidence scoring</h2>
-          <p className="mt-3 text-slate-500 max-w-xl mx-auto">
-            Every decision is backed by visible evidence. Officers and refugees can both understand exactly why a score was given.
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left — mini graph mockup */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Identity Subject</div>
-                <div className="text-xl font-black text-slate-900">Ahmad Karimi</div>
-              </div>
-              <div className="text-right">
-                <div className="text-5xl font-black text-green-600">80</div>
-                <div className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">High Confidence</div>
-              </div>
+    <section className="relative overflow-hidden bg-slate-50 py-24">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_65%)]" />
+        <div className="absolute right-0 top-40 h-80 w-80 rounded-full bg-blue-200/20 blur-3xl" />
+        <div className="absolute left-0 bottom-20 h-96 w-96 rounded-full bg-emerald-200/20 blur-3xl" />
+      </div>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ContainerScroll
+          titleComponent={
+            <div className="mb-10">
+              <h2 className="text-3xl font-black text-slate-900 sm:text-4xl">
+                Transparent identity confidence scoring
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl text-slate-500">
+                Every decision is backed by visible evidence. Officers and refugees can both understand exactly why a score was given.
+              </p>
             </div>
-
-            <div className="h-2 bg-slate-100 rounded-full mb-6 overflow-hidden">
-              <div className="h-full rounded-full bg-gradient-to-r from-red-400 via-amber-400 via-blue-400 to-green-500 relative">
-                <div className="absolute right-[20%] top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full border-2 border-slate-900 shadow" />
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {EVIDENCE_TYPES.map((e) => (
-                <div key={e.label} className="flex items-center justify-between py-2 border-b border-slate-50">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full" style={{ background: e.color }} />
-                    <div>
-                      <div className="text-sm font-semibold text-slate-800">{e.label}</div>
-                      <div className="text-xs text-slate-400">{e.sub}</div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{e.tag}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-5 text-xs text-slate-400 italic">
-              Self-declared submissions require reviewer approval before affecting the confidence score.
-            </div>
-          </div>
-
-          {/* Right — score bands + explaining text */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-slate-900">Score bands & what they mean</h3>
-            <div className="space-y-3">
-              {SCORE_BANDS.map((b) => (
-                <div key={b.range} className={`flex items-center justify-between border rounded-xl px-5 py-4 ${b.color}`}>
-                  <span className="font-black text-lg">{b.range}</span>
-                  <span className="font-semibold">{b.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="space-y-4 pt-2">
-              {[
-                { icon: Fingerprint, title: "Official evidence", desc: "Biometric matches, government records, verified NGO sign-offs" },
-                { icon: FileText, title: "Corroborated evidence", desc: "Family, employer, and school confirmations from third parties" },
-                { icon: UserCheck, title: "Self-declared information", desc: "Refugee-submitted profile, family declarations, education claims — verified before scoring" },
-              ].map((item) => (
-                <div key={item.title} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
-                    <item.icon size={18} className="text-blue-600" />
-                  </div>
+          }
+        >
+          <div className="h-full overflow-auto bg-[linear-gradient(135deg,#f8fafc_0%,#ffffff_45%,#eff6ff_100%)] p-6 md:p-8">
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <div className="mb-6 flex items-center justify-between">
                   <div>
-                    <div className="font-semibold text-slate-900 text-sm">{item.title}</div>
-                    <div className="text-sm text-slate-500">{item.desc}</div>
+                    <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Identity Subject</div>
+                    <div className="text-xl font-black text-slate-900">Ahmad Karimi</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-5xl font-black text-green-600">80</div>
+                    <div className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">High Confidence</div>
                   </div>
                 </div>
-              ))}
-            </div>
 
-            <Link to="/scoring"
-              className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">
-              See evidence graph live <ArrowRight size={14} />
-            </Link>
+                <div className="mb-6 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div className="relative h-full rounded-full bg-gradient-to-r from-red-400 via-amber-400 via-blue-400 to-green-500">
+                    <div className="absolute right-[20%] top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-slate-900 bg-white shadow" />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {EVIDENCE_TYPES.map((e) => (
+                    <div key={e.label} className="flex items-center justify-between border-b border-slate-50 py-2">
+                      <div className="flex items-center gap-3">
+                        <div className="h-3 w-3 rounded-full" style={{ background: e.color }} />
+                        <div>
+                          <div className="text-sm font-semibold text-slate-800">{e.label}</div>
+                          <div className="text-xs text-slate-400">{e.sub}</div>
+                        </div>
+                      </div>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600">{e.tag}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 text-xs italic text-slate-400">
+                  Self-declared submissions require reviewer approval before affecting the confidence score.
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <h3 className="text-xl font-bold text-slate-900">Score bands & what they mean</h3>
+                <div className="space-y-3">
+                  {SCORE_BANDS.map((b) => (
+                    <div key={b.range} className={`flex items-center justify-between rounded-xl border px-5 py-4 ${b.color}`}>
+                      <span className="text-lg font-black">{b.range}</span>
+                      <span className="font-semibold">{b.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="space-y-4 pt-2">
+                  {[
+                    { icon: Fingerprint, title: "Official evidence", desc: "Biometric matches, government records, verified NGO sign-offs" },
+                    { icon: FileText, title: "Corroborated evidence", desc: "Family, employer, and school confirmations from third parties" },
+                    { icon: UserCheck, title: "Self-declared information", desc: "Refugee-submitted profile, family declarations, education claims — verified before scoring" },
+                  ].map((item) => (
+                    <div key={item.title} className="flex gap-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50">
+                        <item.icon size={18} className="text-blue-600" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-slate-900">{item.title}</div>
+                        <div className="text-sm text-slate-500">{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Link
+                  to="/scoring"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 transition-colors hover:text-blue-800"
+                >
+                  See evidence graph live <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
+        </ContainerScroll>
       </div>
     </section>
   )

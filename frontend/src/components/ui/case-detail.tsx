@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { GradientButton } from "./gradient-button";
+import { ShaderAnimation } from "./shader-animation";
 
 export const CaseDetail = () => {
   const [isDark] = useState(false);
@@ -51,8 +52,14 @@ export const CaseDetail = () => {
   };
 
   return (
-    <div className={`flex min-h-screen w-full bg-gray-50/50 dark:bg-gray-950 font-sans ${isDark ? 'dark' : ''}`}>
-      <div className="flex-1 p-4 md:p-8 overflow-auto max-w-6xl mx-auto">
+    <div className={`relative flex min-h-screen w-full overflow-hidden bg-gray-50/50 dark:bg-gray-950 font-sans ${isDark ? 'dark' : ''}`}>
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 opacity-[0.1]">
+          <ShaderAnimation className="h-full w-full" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/94 via-gray-50/82 to-gray-50/96 dark:from-gray-950/95 dark:via-gray-950/86 dark:to-gray-950/96" />
+      </div>
+      <div className="relative z-10 flex-1 overflow-auto p-4 md:p-8 max-w-6xl mx-auto">
         
         {/* Breadcrumb / Back Navigation */}
         <nav className="flex items-center text-sm font-medium text-gray-500 mb-6 group">

@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { GradientButton } from "./gradient-button";
+import { ShaderAnimation } from "./shader-animation";
 
 export const RefugeePortal = () => {
   const [isDark, setIsDark] = useState(false);
@@ -166,9 +167,15 @@ const PortalContent = ({ isDark, setIsDark }: PortalContentProps) => {
   const [activeTab, setActiveTab] = useState("profile");
 
   return (
-    <div className="flex-1 bg-gray-50 dark:bg-gray-950 p-6 lg:p-8 overflow-auto">
+    <div className="relative flex-1 overflow-auto bg-gray-50 dark:bg-gray-950 p-6 lg:p-8">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.08] dark:opacity-[0.14]">
+          <ShaderAnimation className="h-full w-full" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/95 via-gray-50/84 to-gray-50/96 dark:from-gray-950/95 dark:via-gray-950/84 dark:to-gray-950/97" />
+      </div>
       {/* Top Navbar */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="relative z-10 flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">My Case</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">View your case status, submit information, and check announcements.</p>
@@ -191,7 +198,7 @@ const PortalContent = ({ isDark, setIsDark }: PortalContentProps) => {
         </div>
       </div>
 
-      <div className="max-w-6xl space-y-6">
+      <div className="relative z-10 max-w-6xl space-y-6">
         
         {/* Case Status */}
         <section className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">

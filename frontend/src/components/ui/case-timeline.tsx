@@ -1,4 +1,3 @@
-import React from "react";
 import { AuthorityLayout } from "./authority-layout";
 import { Link } from "react-router-dom";
 import { 
