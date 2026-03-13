@@ -59,22 +59,24 @@ const MODULES = [
 
 // ─── Logo ──────────────────────────────────────────────────────────────────────
 
-function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+function Logo({ size = "md", variant = "dark" }: { size?: "sm" | "md" | "lg", variant?: "dark" | "light" }) {
   const text = size === "lg" ? "text-2xl" : size === "sm" ? "text-sm" : "text-base"
   const sub = size === "lg" ? "text-sm" : "text-[10px]"
   const icon = size === "lg" ? 24 : size === "sm" ? 16 : 18
+  const nameColor = variant === "light" ? "text-white" : "text-slate-900"
+  const subColor = variant === "light" ? "text-blue-200" : "text-slate-400"
   return (
     <div className="flex items-center gap-2.5">
       <div
-        className="flex items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-teal-500 shadow"
+        className="flex items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-teal-400 shadow"
         style={{ width: icon * 2, height: icon * 2 }}
       >
         <Globe size={icon} className="text-white" strokeWidth={2} />
       </div>
       <div>
-        <div className={`font-extrabold text-slate-900 leading-tight ${text}`}>Beyond Borders</div>
+        <div className={`font-extrabold leading-tight ${text} ${nameColor}`}>Beyond Borders</div>
         {size !== "sm" && (
-          <div className={`font-medium text-slate-400 tracking-wider uppercase ${sub}`}>Identity Platform</div>
+          <div className={`font-medium tracking-wider uppercase ${sub} ${subColor}`}>Identity Platform</div>
         )}
       </div>
     </div>
@@ -88,7 +90,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 10)
+    const handler = () => setScrolled(window.scrollY > 60)
     window.addEventListener("scroll", handler)
     return () => window.removeEventListener("scroll", handler)
   }, [])
@@ -101,20 +103,24 @@ function Navbar() {
     { label: "Announcements", href: "#announcements" },
   ]
 
+  const isLight = scrolled
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm" : "bg-transparent"
+        isLight ? "bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm" : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <Logo />
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-16">
+        <Logo variant={isLight ? "dark" : "light"} />
 
         {/* Desktop links */}
         <nav className="hidden lg:flex items-center gap-6">
           {navLinks.map((l) => (
             <a key={l.label} href={l.href}
-              className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+              className={`text-sm font-medium transition-colors ${
+                isLight ? "text-slate-600 hover:text-slate-900" : "text-white/70 hover:text-white"
+              }`}>
               {l.label}
             </a>
           ))}
@@ -122,36 +128,49 @@ function Navbar() {
 
         {/* Desktop actions */}
         <div className="hidden lg:flex items-center gap-2">
-          <Link to="/refugee" className="text-sm font-semibold text-blue-600 border border-blue-200 bg-blue-50 hover:bg-blue-100 px-4 py-1.5 rounded-full transition-colors">
+          <Link to="/refugee"
+            className={`text-sm font-semibold border px-4 py-1.5 rounded-full transition-colors ${
+              isLight
+                ? "text-blue-600 border-blue-200 bg-blue-50 hover:bg-blue-100"
+                : "text-white border-white/20 bg-white/10 hover:bg-white/20"
+            }`}>
             Track My Case
           </Link>
-          <Link to="/login" className="text-sm font-semibold text-slate-700 hover:text-slate-900 px-4 py-1.5 rounded-full transition-colors">
+          <Link to="/login"
+            className={`text-sm font-semibold px-4 py-1.5 rounded-full transition-colors ${
+              isLight ? "text-slate-700 hover:text-slate-900" : "text-white/80 hover:text-white"
+            }`}>
             Login
           </Link>
-          <Link to="/dashboard" className="text-sm font-bold bg-slate-900 text-white hover:bg-slate-700 px-4 py-1.5 rounded-full transition-colors">
+          <Link to="/dashboard"
+            className={`text-sm font-bold px-4 py-1.5 rounded-full transition-colors ${
+              isLight ? "bg-slate-900 text-white hover:bg-slate-700" : "bg-[#0084ff] text-white hover:bg-blue-500"
+            }`}>
             Get Started →
           </Link>
         </div>
 
         {/* Mobile hamburger */}
-        <button className="lg:hidden p-2" onClick={() => setMenuOpen(!menuOpen)}>
+        <button
+          className={`lg:hidden p-2 ${isLight ? "text-slate-700" : "text-white"}`}
+          onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="lg:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3">
+        <div className="lg:hidden bg-[#0a0a0a] border-t border-white/10 px-6 py-4 space-y-3">
           {navLinks.map((l) => (
-            <a key={l.label} href={l.href} className="block text-sm font-medium text-slate-700 py-1"
+            <a key={l.label} href={l.href} className="block text-sm font-medium text-white/80 py-1"
               onClick={() => setMenuOpen(false)}>
               {l.label}
             </a>
           ))}
-          <div className="pt-3 space-y-2 border-t border-slate-100">
-            <Link to="/refugee" className="block text-center text-sm font-semibold text-blue-600 border border-blue-200 bg-blue-50 px-4 py-2 rounded-lg">Track My Case</Link>
-            <Link to="/login" className="block text-center text-sm font-semibold text-slate-700 border border-slate-200 px-4 py-2 rounded-lg">Login</Link>
-            <Link to="/dashboard" className="block text-center text-sm font-bold bg-slate-900 text-white px-4 py-2 rounded-lg">Get Started</Link>
+          <div className="pt-3 space-y-2 border-t border-white/10">
+            <Link to="/refugee" className="block text-center text-sm font-semibold text-white border border-white/20 px-4 py-2 rounded-lg">Track My Case</Link>
+            <Link to="/login" className="block text-center text-sm font-semibold text-white/70 border border-white/10 px-4 py-2 rounded-lg">Login</Link>
+            <Link to="/dashboard" className="block text-center text-sm font-bold bg-[#0084ff] text-white px-4 py-2 rounded-lg">Get Started</Link>
           </div>
         </div>
       )}
@@ -161,92 +180,108 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 overflow-hidden">
-      {/* Background grid decoration */}
-      <div className="absolute inset-0 opacity-20"
-        style={{ backgroundImage: "radial-gradient(circle at 1px 1px, #334155 1px, transparent 0)", backgroundSize: "40px 40px" }}
-      />
-      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-blue-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+    <section className="relative min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
+      {/* Blue gradient overlays — Turing style */}
+      <div className="absolute inset-0 pointer-events-none z-[1]">
+        <div className="absolute inset-0 bg-gradient-to-r from-[rgba(0,132,255,0.18)] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-bl from-[rgba(0,132,255,0.10)] via-transparent to-transparent" />
+      </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 grid lg:grid-cols-2 gap-12 items-center w-full">
-        {/* Left */}
-        <div className="space-y-8">
-          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5">
-            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-            <span className="text-blue-300 text-sm font-medium">Humanitarian Identity Platform</span>
-          </div>
+      {/* Video background */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-60"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source
+          src="https://mybycketvercelprojecttest.s3.sa-east-1.amazonaws.com/animation-bg.mp4"
+          type="video/mp4"
+        />
+      </video>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tight">
-            Rebuilding identity for <span className="bg-gradient-to-r from-blue-400 to-teal-300 bg-clip-text text-transparent">displaced people</span>
-            <br />— one verified signal at a time.
-          </h1>
+      {/* Content */}
+      <div className="relative z-[2] min-h-screen flex flex-col justify-end pb-20">
+        {/* Main content row — text left, stats right, pinned to bottom */}
+        <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-[60px] flex flex-col lg:flex-row justify-between items-end gap-12">
 
-          <p className="text-lg text-slate-400 leading-relaxed max-w-xl">
-            A secure humanitarian coordination platform that helps authorities, NGOs, and displaced individuals move from arrival to verification and integration — without repeated registrations or fragmented records.
-          </p>
-
-          <div className="flex flex-wrap gap-3">
-            <Link to="/dashboard"
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl transition-all hover:scale-105 shadow-lg shadow-blue-900/40">
-              Login to Portal <ArrowRight size={16} />
-            </Link>
-            <Link to="/refugee"
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold px-6 py-3 rounded-xl transition-all backdrop-blur">
-              Track My Case
-            </Link>
-            <a href="#how-it-works"
-              className="flex items-center gap-2 text-slate-400 hover:text-white font-medium px-4 py-3 transition-colors">
-              How it works <ChevronDown size={16} />
-            </a>
-          </div>
-
-          <div className="flex items-center gap-6 pt-2">
-            {[["35+", "Active Cases"], ["12", "Pending Evidence"], ["3", "Roles Supported"]].map(([n, l]) => (
-              <div key={l}>
-                <div className="text-2xl font-black text-white">{n}</div>
-                <div className="text-xs text-slate-500 font-medium">{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right — dashboard mockup */}
-        <div className="hidden lg:block">
-          <div className="relative grid grid-cols-2 gap-3">
-            {/* Card 1 */}
-            <div className="col-span-2 bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
-                  <UserCheck size={18} className="text-blue-400" />
-                </div>
-                <div>
-                  <div className="text-white font-bold text-sm">Ahmad Karimi</div>
-                  <div className="text-slate-400 text-xs">Case #BB-7821 · Syria</div>
-                </div>
-                <div className="ml-auto">
-                  <div className="text-green-400 font-black text-2xl">80</div>
-                  <div className="text-slate-500 text-[10px] text-right">High Confidence</div>
-                </div>
-              </div>
-              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-500 to-teal-400 rounded-full" style={{ width: "80%" }} />
-              </div>
+          {/* Left — headline + CTAs */}
+          <div className="max-w-[700px]">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/10 rounded-full px-4 py-1.5 mb-8 backdrop-blur">
+              <div className="w-2 h-2 bg-[#0084ff] rounded-full animate-pulse" />
+              <span className="text-white/70 text-sm font-medium tracking-wide">Humanitarian Identity Platform</span>
             </div>
 
-            {/* Evidence types */}
+            <h1
+              className="font-light leading-[1.08] mb-8 tracking-[-2px]"
+              style={{ fontSize: "clamp(48px, 6vw, 80px)" }}
+            >
+              Rebuilding identity
+              <br />
+              for{" "}
+              <span style={{
+                background: "linear-gradient(90deg, #3b9eff, #38f5c8)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}>
+                displaced people
+              </span>
+              <br />
+              — one verified signal
+              <br />
+              at a time.
+            </h1>
+
+            <p className="text-lg leading-relaxed mb-12" style={{ color: "#b8b8b8" }}>
+              A secure humanitarian coordination platform that helps authorities,
+              NGOs, and displaced individuals move from arrival to verification
+              and integration — without repeated registrations or fragmented records.
+            </p>
+
+            <div className="flex flex-wrap gap-4 items-center mb-16">
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-2.5 text-white py-3.5 px-7 rounded-md text-base font-medium transition-all duration-200 hover:translate-x-0.5"
+                style={{ background: "#0084ff" }}
+              >
+                Login to Portal <ArrowRight size={18} />
+              </Link>
+              <Link
+                to="/refugee"
+                className="py-3.5 px-7 text-base font-medium transition-colors duration-200 hover:text-white"
+                style={{ color: "#b8b8b8", background: "transparent" }}
+              >
+                Track My Case
+              </Link>
+              <a
+                href="#how-it-works"
+                className="flex items-center gap-1.5 py-3.5 px-2 text-base font-medium transition-colors duration-200 hover:text-white"
+                style={{ color: "#b8b8b8" }}
+              >
+                How it works <ChevronDown size={16} />
+              </a>
+            </div>
+          </div>
+
+          {/* Right — stats */}
+          <div className="flex gap-16 lg:gap-20 items-end pb-2 shrink-0">
             {[
-              { color: "#3b82f6", label: "Biometric Match", pts: "+30" },
-              { color: "#22c55e", label: "NGO Validation", pts: "+20" },
-              { color: "#8b5cf6", label: "Family Link", pts: "+15" },
-              { color: "#f97316", label: "Education Record", pts: "+10?" },
-            ].map((e) => (
-              <div key={e.label} className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: e.color }} />
-                  <span className="text-white text-xs font-semibold">{e.label}</span>
+              ["40+", "Evidence types supported"],
+              ["3", "User roles"],
+              ["35+", "Active cases"],
+            ].map(([num, label]) => (
+              <div key={label} className="text-center">
+                <div
+                  className="font-light leading-none mb-3"
+                  style={{ fontSize: "clamp(40px, 5vw, 64px)" }}
+                >
+                  {num}
                 </div>
-                <div className="text-sm font-black" style={{ color: e.color }}>{e.pts}</div>
+                <div className="text-sm font-normal" style={{ color: "#b8b8b8" }}>
+                  {label}
+                </div>
               </div>
             ))}
           </div>
