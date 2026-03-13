@@ -38,6 +38,23 @@ Copy `.env.example` to `.env` and fill in values:
 cp .env.example .env
 ```
 
+## Frontend Pages Available
+
+The complete BorderBridge web application has been rebuilt in React + Tailwind. The following routes are currently implemented and available to test locally:
+
+- `/` **Animated Login Page**: Interactive character-based login and sign-up interface.
+- `/dashboard` **Authority Dashboard**: High-level overview metrics, alerts, and quick actions for immigration officials.
+- `/cases` **Cases Database**: Comprehensive data table of all system-registered refugees with filtering.
+- `/case/:id` **Case Details**: In-depth profile view managing an individual's identity, family links, and score.
+- `/registration` **Client Registration**: Split-pane official intake form to register a new arrival.
+- `/evidence` **Evidence Review**: Management queue for case officers to review and approve submitted documentation.
+- `/scoring` **Identity Confidence Engine**: Visual representation of how points and trust tiers are calculated for an individual case.
+- `/announcements` **Announcements Board**: Interface for authorities to broadcast targeted updates to camps and groups.
+- `/referrals` **Partner Referrals**: Dashboard to match verified refugees with NGO/partner integration services (Housing, Employement).
+- `/timeline` **Visual Case Timeline**: Visual milestone tracker mapping the journey from Arrival to Integration.
+- `/refugee` **Refugee Portal**: Self-service interface for refugees to track their case, view announcements, and upload self-declarations.
+
+
 ## System Roles & Permissions
 
 BorderBridge has three primary user types, mapped to specific dashboards and capabilities, with further internal permission levels for Authorities and Partners.
