@@ -337,5 +337,43 @@
     "created_at": "2026-03-13T21:44:05.847436+00:00",
     "reviewed_at": "2026-03-13T21:44:20.028514+00:00",
     "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "2439634b-1a85-461f-a5af-d7610299fc6d",
+    "case_id": "dbc74041-2787-4916-8ef7-d554feb6c7ee",
+    "evidence_type": "government_record",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-13T22:26:38.488267+00:00",
+    "reviewed_at": "2026-03-13T22:26:38.504590+00:00",
+    "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "56f7aaf0-e20f-4eee-9bca-56d18418f143",
+    "case_id": "b6baf888-c136-4a72-813b-985f423cc687",
+    "evidence_type": "passport",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {
+      "doc_number": "P1234567"
+    },
+    "review_status": "accepted",
+    "created_at": "2026-03-13T22:28:28.711646+00:00",
+    "reviewed_at": "2026-03-13T22:30:52.466514+00:00",
+    "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "f9342f41-cbcb-4347-baa5-bac0a1451b91",
+    "case_id": "92bec1e1-1d82-4112-badf-6e127df45590",
+    "evidence_type": "government_record",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-14T04:17:57.566763+00:00",
+    "reviewed_at": "2026-03-14T04:17:57.580799+00:00",
+    "reviewed_by": "auth_manager_1"
   }
 ]

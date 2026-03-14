@@ -35,7 +35,7 @@ import {
 type Evidence = Record<string, unknown>;
 type ScoreData = Record<string, unknown> | null;
 
-// ── helper: map backend status values to labels
+// ── Status normalization helpers
 function statusLabel(s: string) {
   const m: Record<string, string> = {
     pending: "Pending Review",
@@ -43,7 +43,7 @@ function statusLabel(s: string) {
     rejected: "Rejected",
     disputed: "Disputed",
   };
-  return m[s] ?? s;
+  return m[s] ?? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 function evidenceClassLabel(c: string) {
@@ -53,7 +53,81 @@ function evidenceClassLabel(c: string) {
     corroborated: "Corroborated",
     self_declared: "Self-Declared",
   };
-  return m[c] ?? c;
+  return m[c] ?? c.replace(/_/g, " ").replace(/\b\w/g, (cc) => cc.toUpperCase());
+}
+
+// ── Confidence band helpers
+const BAND_INFO: Record<string, { label: string; color: string; scoreNote: string }> = {
+  under_review:    { label: "Under Review",    color: "text-red-600 bg-red-50 border-red-200",         scoreNote: "Insufficient verified evidence — more documents needed." },
+  provisional:     { label: "Provisional",     color: "text-amber-700 bg-amber-50 border-amber-200",   scoreNote: "Partial identity established — review in progress." },
+  verified:        { label: "Verified",        color: "text-blue-700 bg-blue-50 border-blue-200",      scoreNote: "Identity verified — eligible for integration services." },
+  high_confidence: { label: "High Confidence", color: "text-emerald-700 bg-emerald-50 border-emerald-200", scoreNote: "Strong identity match — fast-tracked for integration." },
+};
+function getBandInfo(band: string | null) {
+  if (!band) return null;
+  return BAND_INFO[band] ?? { label: band.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()), color: "text-gray-700 bg-gray-50 border-gray-200", scoreNote: "" };
+}
+
+// ── 7-stage case progress stepper
+const PIPELINE_STAGES = [
+  { key: "intake_created",       label: "Intake Created" },
+  { key: "evidence_pending",     label: "Evidence Pending" },
+  { key: "provisional_identity", label: "Provisional Identity" },
+  { key: "review_required",      label: "Review Required" },
+  { key: "verified_for_handoff", label: "Verified" },
+  { key: "referred",             label: "Referred" },
+  { key: "service_in_progress",  label: "Service In Progress" },
+];
+// Map legacy status keys to their stepper position
+const STATUS_TO_STAGE_IDX: Record<string, number> = {
+  intake_created: 0, arrival_recorded: 0,
+  evidence_pending: 1, evidence_review: 1,
+  provisional_identity: 2, provisional: 2,
+  review_required: 3,
+  verified_for_handoff: 4, verified: 4,
+  referred: 5, integration_ready: 5,
+  service_in_progress: 6,
+};
+
+function CaseProgressStepper({ status }: { status: string }) {
+  const currentIdx = STATUS_TO_STAGE_IDX[status] ?? 0;
+  return (
+    <div className="w-full overflow-x-auto pb-1">
+      <div className="flex items-center min-w-[640px]">
+        {PIPELINE_STAGES.map((stage, idx) => {
+          const done = idx < currentIdx;
+          const active = idx === currentIdx;
+          return (
+            <div key={stage.key} className="flex items-center flex-1 last:flex-none">
+              <div className="flex flex-col items-center gap-1">
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all ${
+                  done   ? "bg-blue-600 border-blue-600 text-white" :
+                  active ? "bg-white border-blue-600 text-blue-700 shadow-md ring-2 ring-blue-200" :
+                            "bg-gray-100 border-gray-300 text-gray-400"
+                }`}>
+                  {done ? (
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                  ) : active ? (
+                    <div className="h-2.5 w-2.5 rounded-full bg-blue-600" />
+                  ) : (
+                    <span>{idx + 1}</span>
+                  )}
+                </div>
+                <span className={`text-[10px] font-semibold text-center leading-tight max-w-[72px] ${
+                  active ? "text-blue-700" : done ? "text-blue-500" : "text-gray-400"
+                }`}>{stage.label}</span>
+              </div>
+              {idx < PIPELINE_STAGES.length - 1 && (
+                <div className={`flex-1 h-0.5 mx-1 mb-5 rounded-full ${
+                  idx < currentIdx ? "bg-blue-500" : "bg-gray-200"
+                }`} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 // ── Add Evidence Modal
@@ -303,40 +377,61 @@ export const CaseDetail = () => {
               <StatusBadge status={status} />
             </div>
             <p className="text-gray-500 text-sm max-w-xl">
-              Manage evidence, review identity flags, and monitor confidence scores.
-            </p>
+            Managing the identity verification journey for <span className="font-semibold text-gray-700 dark:text-gray-300">{personId}</span>.
+          </p>
           </div>
 
           {/* Score Widget */}
-          <div className="flex items-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl p-4 min-w-[220px] gap-4">
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Confidence Score</p>
-              {predictedScore !== null ? (
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-black text-gray-900 dark:text-gray-100">{predictedScore}</span>
-                  {confidenceBand && (
-                    <span className="text-xs font-semibold text-yellow-700 bg-yellow-50 px-2 py-0.5 rounded-md border border-yellow-200">
-                      {confidenceBand}
-                    </span>
+          {(() => {
+            const bandInfo = getBandInfo(confidenceBand);
+            const scoreColor = confidenceBand === "high_confidence" ? "text-emerald-700"
+              : confidenceBand === "verified" ? "text-blue-700"
+              : confidenceBand === "provisional" ? "text-amber-700"
+              : "text-red-600";
+            return (
+              <div className="flex items-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl p-4 min-w-[240px] gap-4">
+                <div>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Confidence Score</p>
+                  {predictedScore !== null ? (
+                    <div>
+                      <div className="flex items-baseline gap-2">
+                        <span className={`text-4xl font-black ${scoreColor}`}>{predictedScore}</span>
+                        <span className="text-base font-medium text-gray-400">/100</span>
+                        {bandInfo && (
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${bandInfo.color}`}>
+                            {bandInfo.label}
+                          </span>
+                        )}
+                      </div>
+                      {bandInfo?.scoreNote && (
+                        <p className="text-xs text-gray-500 mt-1 max-w-[180px]">{bandInfo.scoreNote}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-sm text-gray-400 italic">Not scored yet — run Recompute Score to begin.</span>
                   )}
                 </div>
-              ) : (
-                <span className="text-sm text-gray-400 italic">Not scored yet</span>
-              )}
-            </div>
-            {predictedScore !== null ? (
-              predictedScore >= 60 ? (
-                <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="h-6 w-6 text-blue-600" />
-                </div>
-              ) : (
-                <div className="h-12 w-12 rounded-full bg-yellow-50 flex items-center justify-center shrink-0">
-                  <ShieldAlert className="h-6 w-6 text-yellow-600" />
-                </div>
-              )
-            ) : null}
-          </div>
+                {predictedScore !== null ? (
+                  predictedScore >= 60 ? (
+                    <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                      <ShieldCheck className="h-6 w-6 text-blue-600" />
+                    </div>
+                  ) : (
+                    <div className="h-12 w-12 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
+                      <ShieldAlert className="h-6 w-6 text-amber-600" />
+                    </div>
+                  )
+                ) : null}
+              </div>
+            );
+          })()}
         </header>
+
+        {/* Stage Stepper */}
+        <div className="mb-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm p-5">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-4">Case Progress Journey</p>
+          <CaseProgressStepper status={status} />
+        </div>
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -351,7 +446,7 @@ export const CaseDetail = () => {
               <div className="p-6">
                 <dl className="space-y-4">
                   <div>
-                    <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Person ID</dt>
+                    <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Registered Identity</dt>
                     <dd className="text-base font-medium text-gray-900 dark:text-gray-100">{personId}</dd>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -564,11 +659,16 @@ export const CaseDetail = () => {
             className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-sm transition-colors flex items-center justify-center disabled:opacity-60"
           >
             {scoreLoading ? (
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Analyzing evidence…
+              </>
             ) : (
-              <RefreshCw className="h-4 w-4 mr-2" />
+              <>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Recompute Score
+              </>
             )}
-            Recompute Score
           </button>
           <GradientButton
             className="w-full sm:w-auto rounded-lg"

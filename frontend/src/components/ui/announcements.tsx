@@ -76,11 +76,11 @@ export const AnnouncementsPage = () => {
     setSubmitResult(null);
     try {
       const created = await createAnnouncement({
-        case_id: selectedCaseId,
         title: title.trim(),
-        message: message.trim(),
-        audience,
-        timing,
+        body: message.trim(),
+        announcement_type: audience || "general",
+        target_type: "case",
+        target_ref: selectedCaseId,
       });
       setAnnouncements((prev) => [created, ...prev]);
       setSubmitResult({ ok: true, message: "Announcement broadcast successfully." });

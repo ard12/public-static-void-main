@@ -199,10 +199,13 @@ export const EvidenceReviewPage = () => {
                 </div>
 
                 <div className="flex-1 p-6 overflow-auto">
-                  {/* Document placeholder */}
-                  <div className="w-full h-48 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center mb-6">
-                    <FileText className="h-12 w-12 text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500 font-medium">[Document Preview Rendered Here]</p>
+                  {/* Secure document placeholder */}
+                  <div className="w-full h-44 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border border-slate-200 dark:border-gray-700 flex flex-col items-center justify-center mb-6 shadow-inner">
+                    <div className="h-12 w-12 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center mb-3">
+                      <FileText className="h-6 w-6 text-slate-500 dark:text-gray-400" />
+                    </div>
+                    <p className="text-sm font-semibold text-slate-600 dark:text-gray-300">Secure Document Vault</p>
+                    <p className="text-xs text-slate-400 dark:text-gray-500 mt-1">Document preview unavailable in demo mode</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-6">

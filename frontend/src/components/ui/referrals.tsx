@@ -110,7 +110,8 @@ export const ReferralsPage = () => {
             <div key={value} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
               <Icon className={`h-6 w-6 ${color} mb-2`} />
               <span className="text-xl font-bold">{typeCount(value)}</span>
-              <span className="text-xs text-gray-500">{label}</span>
+              <span className="text-xs text-gray-500 font-medium">{label}</span>
+              <span className="text-[10px] text-gray-400 mt-0.5">this session</span>
             </div>
           ))}
         </div>

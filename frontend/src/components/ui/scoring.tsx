@@ -8,12 +8,16 @@ import { Link, useParams } from "react-router-dom";
 
 type ScoreResult = Record<string, unknown> | null;
 
-const BAND_COLORS: Record<string, string> = {
-  low:    "bg-red-100 text-red-700 border-red-200",
-  provisional:   "bg-yellow-100 text-yellow-700 border-yellow-200",
-  verified:      "bg-blue-100 text-blue-700 border-blue-200",
-  high_confidence: "bg-green-100 text-green-700 border-green-200",
+const BAND_INFO: Record<string, { label: string; color: string; scoreNote: string; textColor: string }> = {
+  under_review:    { label: "Under Review",    color: "bg-red-100 text-red-700 border-red-200",           textColor: "text-red-600",     scoreNote: "Insufficient verified evidence — more documents needed." },
+  provisional:     { label: "Provisional",     color: "bg-amber-100 text-amber-700 border-amber-200",     textColor: "text-amber-600",   scoreNote: "Partial identity established — review in progress." },
+  verified:        { label: "Verified",        color: "bg-blue-100 text-blue-700 border-blue-200",         textColor: "text-blue-700",    scoreNote: "Identity verified — eligible for integration services." },
+  high_confidence: { label: "High Confidence", color: "bg-emerald-100 text-emerald-700 border-emerald-200", textColor: "text-emerald-700", scoreNote: "Strong identity match — fast-tracked for integration." },
 };
+function getBandInfo(band: string | null) {
+  if (!band) return null;
+  return BAND_INFO[band] ?? { label: band.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()), color: "bg-gray-100 text-gray-700 border-gray-200", textColor: "text-gray-700", scoreNote: "" };
+}
 
 export const ScoringPage = () => {
   const { id: routeId } = useParams<{ id?: string }>();
@@ -119,16 +123,24 @@ export const ScoringPage = () => {
               <div className="flex items-center gap-4 bg-blue-50 dark:bg-blue-900/20 px-6 py-3 rounded-xl border border-blue-100 dark:border-blue-900/50">
                 <ShieldCheck className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 <div>
-                  <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">Current Confidence</p>
+                  <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">Identity Score</p>
                   {loading ? (
                     <Loader2 className="h-6 w-6 animate-spin text-blue-500 mt-1" />
                   ) : predictedScore !== null ? (
-                    <p className="text-3xl font-bold text-blue-700 dark:text-blue-400">
-                      {predictedScore}
-                      <span className="text-lg font-medium text-blue-500 dark:text-blue-500/70">/100</span>
-                    </p>
+                    (() => {
+                      const bi = getBandInfo(confidenceBand);
+                      return (
+                        <div>
+                          <p className={`text-3xl font-bold ${bi?.textColor ?? "text-blue-700"}`}>
+                            {predictedScore.toFixed(1)}
+                            <span className="text-lg font-medium text-blue-500/70">/100</span>
+                          </p>
+                          {bi?.scoreNote && <p className="text-xs text-blue-700/70 mt-0.5 max-w-[180px]">{bi.scoreNote}</p>}
+                        </div>
+                      );
+                    })()
                   ) : (
-                    <p className="text-sm text-blue-500 italic mt-1">Not scored yet</p>
+                    <p className="text-sm text-blue-500 italic mt-1">Not scored yet — run Recompute Score first.</p>
                   )}
                 </div>
               </div>
@@ -177,12 +189,17 @@ export const ScoringPage = () => {
                 disabled={recomputing || loading || !caseId}
                 className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm"
               >
-                {recomputing ? (
+              {recomputing ? (
+                <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
+                  Analyzing evidence…
+                </>
+              ) : (
+                <>
                   <RefreshCw className="h-4 w-4" />
-                )}
-                Recompute Score
+                  Recompute Score
+                </>
+              )}
               </button>
               {caseId && (
                 <Link
@@ -207,17 +224,25 @@ export const ScoringPage = () => {
           {/* Confidence Band Badge */}
           {confidenceBand && (
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
-              <h3 className="font-semibold border-b border-gray-100 dark:border-gray-800 pb-3 mb-4">Confidence Band</h3>
-              <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold border ${BAND_COLORS[confidenceBand] ?? "bg-gray-100 text-gray-700 border-gray-200"}`}>
-                {confidenceBand.replace(/_/g, " ")}
-              </span>
+              <h3 className="font-semibold border-b border-gray-100 dark:border-gray-800 pb-3 mb-4">Confidence Level</h3>
+              {(() => {
+                const bi = getBandInfo(confidenceBand);
+                return bi ? (
+                  <div>
+                    <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold border ${bi.color}`}>
+                      {bi.label}
+                    </span>
+                    {bi.scoreNote && <p className="text-xs text-gray-500 mt-2">{bi.scoreNote}</p>}
+                  </div>
+                ) : null;
+              })()}
             </div>
           )}
 
           {/* Feature Snapshot Breakdown */}
           {featureSnapshot && Object.keys(featureSnapshot).length > 0 && (
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
-              <h3 className="font-semibold border-b border-gray-100 dark:border-gray-800 pb-3 mb-4">Feature Snapshot</h3>
+              <h3 className="font-semibold border-b border-gray-100 dark:border-gray-800 pb-3 mb-4">Score Factors</h3>
               <ul className="space-y-3">
                 {Object.entries(featureSnapshot).map(([key, val]) => {
                   const numVal = Number(val);

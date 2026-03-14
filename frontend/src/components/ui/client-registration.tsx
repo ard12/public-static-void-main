@@ -69,7 +69,6 @@ const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
-          notifs={5}
         />
         <Option
           Icon={Tag}
@@ -77,7 +76,6 @@ const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
-          notifs={12}
         />
         <Option
           Icon={BarChart3}
@@ -106,7 +104,6 @@ const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
-          notifs={2}
         />
       </div>
 
@@ -269,7 +266,7 @@ const RegistrationContent = ({ isDark, setIsDark }: RegistrationContentProps) =>
   const [intakeLocation, setIntakeLocation] = useState("");
   const [agency, setAgency] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const [result, setResult] = useState<{ ok: boolean; message: string; caseId?: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -283,7 +280,9 @@ const RegistrationContent = ({ isDark, setIsDark }: RegistrationContentProps) =>
         intake_location: intakeLocation || undefined,
         owner_agency: agency || undefined,
       });
-      setResult({ ok: true, message: `Case created: ${(created as any).case_code ?? (created as any).id}` });
+      const caseId = (created as any).id ?? "";
+      const caseCode = (created as any).case_code ?? caseId;
+      setResult({ ok: true, message: `Case created: ${caseCode}`, caseId });
       setFullName("");
       setIntakeLocation("");
       setAgency("");
@@ -327,8 +326,18 @@ const RegistrationContent = ({ isDark, setIsDark }: RegistrationContentProps) =>
 
       {/* Result banner */}
       {result && (
-        <div className={`relative z-10 mb-4 px-4 py-3 rounded-lg text-sm font-medium ${result.ok ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-          {result.message}
+        <div className={`relative z-10 mb-4 px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-between gap-4 ${
+          result.ok ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+        }`}>
+          <span>{result.message}</span>
+          {result.ok && result.caseId && (
+            <a
+              href={`/case/${result.caseId}`}
+              className="shrink-0 inline-flex items-center gap-1 px-3 py-1 bg-green-700 text-white text-xs font-semibold rounded-md hover:bg-green-800 transition-colors"
+            >
+              View Case →
+            </a>
+          )}
         </div>
       )}
 

@@ -408,5 +408,78 @@
       "new_state": "accepted"
     },
     "created_at": "2026-03-13T21:44:20.029666+00:00"
+  },
+  {
+    "id": "3911c01c-0f7c-4121-bd15-994ffcd327eb",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "dbc74041-2787-4916-8ef7-d554feb6c7ee",
+    "details": {
+      "type": "government_record",
+      "class": "official"
+    },
+    "created_at": "2026-03-13T22:26:38.489383+00:00"
+  },
+  {
+    "id": "2b158eb6-b6fc-4cea-9805-cb783cb0b0d9",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "dbc74041-2787-4916-8ef7-d554feb6c7ee",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-13T22:26:38.505727+00:00"
+  },
+  {
+    "id": "fb27e8d4-3cef-462e-b849-63eb70956db7",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "b6baf888-c136-4a72-813b-985f423cc687",
+    "details": {
+      "type": "passport",
+      "class": "official"
+    },
+    "created_at": "2026-03-13T22:28:28.713352+00:00"
+  },
+  {
+    "id": "8b87a44e-7a65-4d7f-bd1f-8f23d9d90435",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "b6baf888-c136-4a72-813b-985f423cc687",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-13T22:30:52.468095+00:00"
+  },
+  {
+    "id": "dfccecd1-1460-4f4f-b711-7a837326e251",
+    "action": "add_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "92bec1e1-1d82-4112-badf-6e127df45590",
+    "details": {
+      "type": "government_record",
+      "class": "official"
+    },
+    "created_at": "2026-03-14T04:17:57.567872+00:00"
+  },
+  {
+    "id": "c93b15b2-b3d8-44bf-8ecb-3578d58296cb",
+    "action": "review_evidence",
+    "user_id": "auth_manager_1",
+    "case_id": "92bec1e1-1d82-4112-badf-6e127df45590",
+    "details": {
+      "new_state": "accepted"
+    },
+    "created_at": "2026-03-14T04:17:57.582200+00:00"
+  },
+  {
+    "id": "92e814fd-65ab-45ab-8a7b-699ee5c483e1",
+    "action": "create_referral",
+    "user_id": "auth_manager_1",
+    "case_id": "50da40cb-0a29-420f-aa5a-527f43b85f5d",
+    "details": {
+      "to_agency": "Country X"
+    },
+    "created_at": "2026-03-14T04:17:57.636447+00:00"
   }
 ]

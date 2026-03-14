@@ -9,24 +9,44 @@ type Case = Record<string, unknown>;
 
 function getStatusLabel(status: string): string {
   const map: Record<string, string> = {
+    // New 7-stage pipeline
+    intake_created: "Intake Created",
+    evidence_pending: "Evidence Pending",
+    provisional_identity: "Provisional Identity",
+    review_required: "Review Required",
+    verified_for_handoff: "Verified",
+    referred: "Referred",
+    service_in_progress: "Service In Progress",
+    // Legacy / seed statuses
     arrival_recorded: "Arrival Recorded",
     evidence_review: "Evidence Review",
     provisional: "Provisional",
     verified: "Verified",
     integration_ready: "Integration Ready",
     closed: "Closed",
+    // Evidence states
+    under_review: "Under Review",
+    high_confidence: "High Confidence",
+    pending: "Pending Review",
+    accepted: "Accepted",
+    rejected: "Rejected",
+    disputed: "Disputed",
   };
-  return map[status] ?? status;
+  return map[status] ?? status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 function StatusBadge({ status }: { status: string }) {
   const label = getStatusLabel(status);
   const color =
-    status === "integration_ready" || status === "verified"
+    ["integration_ready", "verified", "verified_for_handoff", "high_confidence"].includes(status)
       ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:border-green-800"
-      : status === "evidence_review"
+      : ["service_in_progress", "referred"].includes(status)
+      ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800"
+      : ["evidence_review", "evidence_pending", "review_required", "under_review"].includes(status)
+      ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:border-amber-800"
+      : ["provisional", "provisional_identity"].includes(status)
       ? "bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-800"
-      : status === "provisional"
+      : ["intake_created", "arrival_recorded"].includes(status)
       ? "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800"
       : "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300";
   return (
@@ -38,15 +58,15 @@ function StatusBadge({ status }: { status: string }) {
 
 function ScoreBar({ score }: { score: number | null }) {
   if (score === null || score === undefined)
-    return <span className="text-xs text-gray-400">N/A</span>;
+    return <span className="text-xs text-gray-400 italic">Unscored</span>;
   const pct = Math.min(100, Math.max(0, score));
-  const color = pct >= 80 ? "bg-green-500" : pct >= 60 ? "bg-blue-500" : "bg-yellow-500";
+  const color = pct >= 80 ? "bg-green-500" : pct >= 60 ? "bg-blue-500" : pct >= 40 ? "bg-yellow-500" : "bg-red-400";
   return (
     <div className="flex items-center gap-2">
-      <div className="w-16 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
+      <div className="w-20 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className={`h-full rounded-full transition-all duration-500 ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="font-bold">{pct}</span>
+      <span className="font-bold text-gray-800 dark:text-gray-200">{pct.toFixed(1)}</span>
     </div>
   );
 }
@@ -162,7 +182,7 @@ export const CasesPage = () => {
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-semibold text-xs tracking-wider uppercase border-b border-gray-200 dark:border-gray-800">
                 <tr>
-                  <th className="px-6 py-4">Case ID / Person</th>
+                  <th className="px-6 py-4">Refugee Case</th>
                   <th className="px-6 py-4">Location</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4">Confidence Score</th>

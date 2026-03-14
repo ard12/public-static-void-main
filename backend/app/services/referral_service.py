@@ -25,6 +25,7 @@ class ReferralService:
              raise HTTPException(status_code=403, detail="Only Case Managers can create referrals.")
         
         referral_data = referral_in.model_dump()
+        referral_data["case_id"] = case_id
         referral_data["status"] = ReferralStatus.OPEN.value
         referral_data["created_by"] = current_user.id
         referral_data["created_at"] = datetime.now(timezone.utc).isoformat()

@@ -70,8 +70,8 @@ export const AuthorityDashboard = () => {
 
   return (
     <AuthorityLayout
-      title="Dashboard"
-      subtitle="Overview of Border Actions and Case Flow"
+      title="BorderBridge Operations Center"
+      subtitle="Real-time coordination for refugee identity verification across agencies."
       headerActions={
         <div className="flex items-center gap-3">
           {/* Backend health indicator */}
@@ -109,28 +109,28 @@ export const AuthorityDashboard = () => {
           value={loading ? "—" : String(total)}
           icon={<Monitor className="h-5 w-5" />}
           color="text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/20"
-          trend={loading ? "Loading…" : `${total} total`}
+          trend={loading ? "Loading…" : `${total} refugee${total !== 1 ? "s" : ""} in the system`}
         />
         <MetricCard
           label="Evidence Pending"
           value={loading ? "—" : String(evidencePending)}
           icon={<Clock className="h-5 w-5" />}
-          color="text-yellow-600 bg-yellow-50 dark:text-yellow-400 dark:bg-yellow-900/20"
-          trend="Needs verification"
+          color="text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-900/20"
+          trend={loading ? "…" : `${evidencePending} case${evidencePending !== 1 ? "s" : ""} need a decision`}
         />
         <MetricCard
-          label="Provisional Cases"
+          label="Provisional Identity"
           value={loading ? "—" : String(provisional)}
           icon={<AlertCircle className="h-5 w-5" />}
-          color="text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
-          trend="Awaiting scoring"
+          color="text-yellow-600 bg-yellow-50 dark:text-yellow-400 dark:bg-yellow-900/20"
+          trend={loading ? "…" : `${provisional} awaiting full verification`}
         />
         <MetricCard
           label="Integration Ready"
           value={loading ? "—" : String(integrationReady)}
           icon={<Users className="h-5 w-5" />}
           color="text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-900/20"
-          trend="Passed verification"
+          trend={loading ? "…" : `${integrationReady} cleared for services`}
         />
       </div>
 

@@ -91,8 +91,8 @@ export const CaseTimelinePage = () => {
 
   return (
     <AuthorityLayout
-      title="Case Timeline Journey"
-      subtitle={casePersonId ? `Visual progress tracking for ${casePersonId}` : "Loading case…"}
+      title="Case Progress Journey"
+      subtitle={casePersonId ? `Verification journey for ${casePersonId} · Status: ${statusLabel(caseStatus)}` : "Loading case…"}
     >
       <div className="max-w-4xl mx-auto py-6">
         <div className="flex items-center justify-between mb-8">

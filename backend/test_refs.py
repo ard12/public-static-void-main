@@ -1,31 +1,38 @@
+"""Integration smoke-test: create a case then create a referral on it."""
+
 from fastapi.testclient import TestClient
 from app.main import app
-import builtins
 
-# Force unbuffered output immediately
-import sys
-sys.stdout.reconfigure(line_buffering=True)
-sys.stderr.reconfigure(line_buffering=True)
-
-print("Init TestClient...")
 client = TestClient(app)
 
-print("POST /cases")
-case = client.post("/cases", json={
-    "person_id": "new",
-    "person": {"name": "Test"},
-    "status": "intake_created"
-}).json()
-cid = case["case_id"]
-print("Created:", cid)
+HEADERS = {"X-Demo-Username": "auth_manager"}
 
-print(f"POST /cases/{cid}/referrals")
-res = client.post(f"/cases/{cid}/referrals", json={
-    "case_id": cid,
-    "referral_type": "referral",
-    "from_agency": "UNHCR",
-    "to_agency": "Country X",
-    "reason": "Passed"
-})
-print("Referral Status:", res.status_code)
-print("Referral Body:", res.text)
+
+def test_create_case_then_referral():
+    # Create a new case
+    res = client.post(
+        "/cases",
+        json={
+            "person_id": "new",
+            "person": {"name": "Test"},
+            "status": "intake_created",
+        },
+        headers=HEADERS,
+    )
+    assert res.status_code == 200, f"POST /cases failed: {res.text}"
+    case = res.json()
+    cid = case["case_id"]
+
+    # Create a referral on that case
+    res = client.post(
+        f"/cases/{cid}/referrals",
+        json={
+            "case_id": cid,
+            "referral_type": "referral",
+            "from_agency": "UNHCR",
+            "to_agency": "Country X",
+            "reason": "Passed",
+        },
+        headers=HEADERS,
+    )
+    assert res.status_code == 200, f"POST /cases/{cid}/referrals failed: {res.text}"
