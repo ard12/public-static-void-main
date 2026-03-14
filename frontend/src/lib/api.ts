@@ -2,21 +2,24 @@
  * BorderBridge API client
  * All requests include X-Demo-Username for the FastAPI demo-auth middleware.
  * Backend runs on http://127.0.0.1:8000
+ * The header value is derived from the logged-in user's role stored in localStorage.
  */
 
+import { getCurrentUser, getDemoUsername } from "./auth";
+
 const BASE_URL = "http://127.0.0.1:8000";
-const DEFAULT_USER = "auth_manager";
 
 async function request<T>(
   path: string,
   options: RequestInit = {},
-  user: string = DEFAULT_USER
 ): Promise<T> {
+  const user = getCurrentUser();
+  const demoUsername = getDemoUsername(user);
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      "X-Demo-Username": user,
+      "X-Demo-Username": demoUsername,
       ...(options.headers ?? {}),
     },
   });

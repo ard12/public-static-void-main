@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Button } from "./button";
 import { Input } from "./input";
 import { Label } from "./label";
-import { Checkbox } from "./checkbox";
-import { Eye, EyeOff, Mail, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { GradientButton } from "@/components/ui/gradient-button";
+import { authenticate, setCurrentUser } from "../../lib/auth";
 interface PupilProps {
   size?: number;
   maxDistance?: number;
@@ -178,10 +177,8 @@ const EyeBall = ({
 
 
 export function AnimatedLoginPage() {
-  const [isSignup, setIsSignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -315,37 +312,24 @@ export function AnimatedLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+    // Short delay for UX feel
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    const user = authenticate(username.trim(), password);
+    if (!user) {
+      setError("Invalid username or password.");
+      setIsLoading(false);
       return;
     }
 
-    if (isSignup) {
-      const phoneRegex = /^\+?[0-9\s\-()]{7,20}$/;
-      if (!phoneRegex.test(phone)) {
-        setError("Please enter a valid phone number.");
-        return;
-      }
-      if (password.length < 8) {
-        setError("Password must be at least 8 characters long.");
-        return;
-      }
-    }
+    setCurrentUser(user);
 
-    setIsLoading(true);
-
-    // Simulate API delay (quick)
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    // Mock authentication - validate against dummy credentials
-    if (email === "demo@borderbridge.org" && password === "demo1234" && !isSignup) {
-      console.log("✅ Login successful!");
-      navigate('/refugee');
+    if (user.role === "refugee") {
+      navigate("/my-case");
     } else {
-      console.log(isSignup ? "✅ Signup successful!" : "✅ Login successful!");
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
 
     setIsLoading(false);
@@ -360,7 +344,10 @@ export function AnimatedLoginPage() {
             <div className="size-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
               <Sparkles className="size-4" />
             </div>
-            <span>BorderBridge</span>
+            <div className="flex flex-col">
+              <span className="font-bold">BorderBridge</span>
+              <span className="text-xs text-white/60 font-medium tracking-wider uppercase">Authority System</span>
+            </div>
           </div>
         </div>
 
@@ -567,48 +554,30 @@ export function AnimatedLoginPage() {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold tracking-tight mb-2 text-gray-900">
-              {isSignup ? "Create an account" : "Welcome back!"}
+              Welcome back
             </h1>
             <p className="text-gray-500 text-sm">
-              {isSignup ? "Join BorderBridge today" : "Please sign in to your BorderBridge account"}
+              Sign in to the BorderBridge Authority System
             </p>
           </div>
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-900">Email</Label>
+              <Label htmlFor="username" className="text-sm font-medium text-gray-900">Username</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="authority@borderbridge.org"
-                value={email}
-                autoComplete="off"
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                placeholder="e.g. jam1988"
+                value={username}
+                autoComplete="username"
+                onChange={(e) => setUsername(e.target.value)}
                 onFocus={() => setIsTyping(true)}
                 onBlur={() => setIsTyping(false)}
                 required
                 className="h-12 bg-white border-gray-200 focus:border-blue-600 focus:ring-blue-600"
               />
             </div>
-
-            {isSignup && (
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-medium text-gray-900">Phone Number</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+1 (555) 000-0000"
-                  value={phone}
-                  autoComplete="off"
-                  onChange={(e) => setPhone(e.target.value)}
-                  onFocus={() => setIsTyping(true)}
-                  onBlur={() => setIsTyping(false)}
-                  required
-                  className="h-12 bg-white border-gray-200 focus:border-blue-600 focus:ring-blue-600"
-                />
-              </div>
-            )}
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium text-gray-900">Password</Label>
@@ -636,24 +605,6 @@ export function AnimatedLoginPage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="remember" className="border-gray-300 text-blue-600 focus:ring-blue-600" />
-                <Label
-                  htmlFor="remember"
-                  className="text-sm font-normal cursor-pointer text-gray-600"
-                >
-                  Remember for 30 days
-                </Label>
-              </div>
-              <a
-                href="#"
-                className="text-sm text-blue-600 hover:underline font-medium"
-              >
-                Forgot password?
-              </a>
-            </div>
-
             {error && (
               <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
                 {error}
@@ -665,37 +616,9 @@ export function AnimatedLoginPage() {
               className="w-full rounded-xl"
               disabled={isLoading}
             >
-              {isLoading ? (isSignup ? "Creating account..." : "Signing in...") : (isSignup ? "Sign up" : "Log in")}
+              {isLoading ? "Signing in..." : "Log in"}
             </GradientButton>
-
-            <div className="text-center mt-4">
-              <p className="text-sm text-gray-600">
-                {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsSignup(!isSignup);
-                    setError("");
-                  }}
-                  className="text-blue-600 hover:underline font-medium"
-                >
-                  {isSignup ? "Log in" : "Sign up"}
-                </button>
-              </p>
-            </div>
           </form>
-
-          {/* Social Login */}
-          <div className="mt-6">
-            <Button 
-              variant="outline" 
-              className="w-full h-12 bg-white border-gray-200 hover:bg-gray-50 text-gray-900"
-              type="button"
-            >
-              <Mail className="mr-2 size-5" />
-              Continue with SSO
-            </Button>
-          </div>
         </div>
       </div>
     </div>

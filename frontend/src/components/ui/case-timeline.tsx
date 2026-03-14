@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { AuthorityLayout } from "./authority-layout";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft, MapPin, UserCheck, ShieldCheck, HeartHandshake,
   Clock, Loader2, AlertCircle, ListChecks
@@ -38,22 +38,32 @@ function formatDate(ts: string | undefined) {
 }
 
 export const CaseTimelinePage = () => {
-  const { id: routeId } = useParams<{ id?: string }>();
+  const { caseId: routeId } = useParams<{ caseId?: string }>();
+  const navigate = useNavigate();
   const [caseId, setCaseId] = useState<string>(routeId ?? "");
+  const [caseCode, setCaseCode] = useState<string>("");
   const [casePersonId, setCasePersonId] = useState<string>("");
   const [caseStatus, setCaseStatus] = useState<string>("—");
   const [timeline, setTimeline] = useState<TimelineEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [empty, setEmpty] = useState(false);
 
   const resolve = useCallback(async () => {
     let id = routeId ?? "";
     if (!id) {
       try {
         const cases = await listCases();
-        if (cases.length > 0) id = String(cases[0].id ?? "");
+        if (cases.length === 0) {
+          setEmpty(true);
+          setLoading(false);
+          return;
+        }
+        id = String(cases[0].case_id ?? cases[0].id ?? "");
+        navigate(`/timeline/${id}`, { replace: true });
+        return; // Effect will re-run after redirect with caseId in URL
       } catch {
-        setError("No cases found.");
+        setError("Could not load cases.");
         setLoading(false);
         return;
       }
@@ -67,13 +77,15 @@ export const CaseTimelinePage = () => {
       ]);
       setCasePersonId(String(caseData.person_id ?? id));
       setCaseStatus(String(caseData.status ?? "—"));
+      const code = String(caseData.case_code ?? caseData.id ?? id);
+      setCaseCode(code);
       setTimeline(events);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load timeline.");
+    } catch {
+      setError("Case not found");
     } finally {
       setLoading(false);
     }
-  }, [routeId]);
+  }, [routeId, navigate]);
 
   useEffect(() => { resolve(); }, [resolve]);
 
@@ -92,7 +104,7 @@ export const CaseTimelinePage = () => {
   return (
     <AuthorityLayout
       title="Case Progress Journey"
-      subtitle={casePersonId ? `Verification journey for ${casePersonId} · Status: ${statusLabel(caseStatus)}` : "Loading case…"}
+      subtitle={caseCode ? `Case Timeline — ${caseCode}` : casePersonId ? `Verification journey for ${casePersonId} · Status: ${statusLabel(caseStatus)}` : "Loading case…"}
     >
       <div className="max-w-4xl mx-auto py-6">
         <div className="flex items-center justify-between mb-8">
@@ -114,10 +126,18 @@ export const CaseTimelinePage = () => {
           <div className="flex items-center justify-center py-32 gap-3 text-gray-400">
             <Loader2 className="h-6 w-6 animate-spin" /> Loading timeline…
           </div>
+        ) : empty ? (
+          <div className="flex flex-col items-center justify-center py-32 gap-4 text-gray-400">
+            <Clock className="h-10 w-10" />
+            <p className="font-medium text-gray-500">No cases yet. Register a case to see its timeline.</p>
+            <Link to="/registration" className="mt-2 inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+              Register a Case →
+            </Link>
+          </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center py-32 gap-3 text-red-500">
             <AlertCircle className="h-8 w-8" />
-            <p className="font-medium">{error}</p>
+            <p className="font-medium">Case not found</p>
             <Link to="/cases" className="text-sm text-blue-600 hover:underline">Back to Cases</Link>
           </div>
         ) : (

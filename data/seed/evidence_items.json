@@ -375,5 +375,17 @@
     "created_at": "2026-03-14T04:17:57.566763+00:00",
     "reviewed_at": "2026-03-14T04:17:57.580799+00:00",
     "reviewed_by": "auth_manager_1"
+  },
+  {
+    "id": "9a354d40-5044-41e0-a8e1-a1e1e6427213",
+    "case_id": "502f387f-91ea-49c6-85cf-a3ad9e87ba09",
+    "evidence_type": "government_record",
+    "trust_class": "official",
+    "source": "authority",
+    "details": {},
+    "review_status": "accepted",
+    "created_at": "2026-03-14T04:37:44.966606+00:00",
+    "reviewed_at": "2026-03-14T04:37:44.987576+00:00",
+    "reviewed_by": "auth_manager_1"
   }
 ]

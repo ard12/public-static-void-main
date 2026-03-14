@@ -1,11 +1,12 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home, Monitor, Tag, BarChart3, Users, ChevronsRight, GitCommit,
-  Moon, Sun, Bell, User, BellRing
+  Moon, Sun, Bell, User, BellRing, LogOut
 } from "lucide-react";
 import { ShaderAnimation } from "./shader-animation";
+import { getCurrentUser, clearCurrentUser } from "../../lib/auth";
 
 export const AuthorityLayout = ({ 
   children, 
@@ -21,6 +22,14 @@ export const AuthorityLayout = ({
   const [isDark, setIsDark] = useState(false);
   const [open, setOpen] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
+  const displayName = currentUser?.display ?? "Officer";
+
+  const handleLogout = () => {
+    clearCurrentUser();
+    navigate("/login");
+  };
 
   useEffect(() => {
     if (isDark) {
@@ -108,12 +117,19 @@ export const AuthorityLayout = ({
                     {isDark ? <Sun className="h-4 w-4 text-gray-600 dark:text-gray-300" /> : <Moon className="h-4 w-4 text-gray-600 dark:text-gray-300" />}
                   </button>
                   <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-1"></div>
-                  <Link to="/" className="flex items-center gap-2 group p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div className="flex items-center gap-2 group p-1.5 rounded-lg transition-colors">
                     <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
                       <User className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block mr-1">Officer J.</span>
-                  </Link>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block">{displayName}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    title="Logout"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-200 dark:hover:border-red-800 transition-colors"
+                  >
+                    <LogOut className="h-4 w-4 text-gray-500 hover:text-red-600 dark:text-gray-400" />
+                  </button>
                </div>
             </header>
             
